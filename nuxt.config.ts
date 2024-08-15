@@ -2,6 +2,9 @@ export default defineNuxtConfig({
   app: {
     keepalive: true,
     head: {
+      htmlAttrs: {
+        lang: "fr",
+      },
       charset: "utf-8",
       viewport: "width=device-width,initial-scale=1",
       title: "Turms",
@@ -28,9 +31,14 @@ export default defineNuxtConfig({
     },
   },
 
-  ssr: false,
+  ssr: true,
   components: true,
   sourcemap: false,
+
+  routeRules: {
+    // Static generation. No JS.
+    "/": { prerender: true, experimentalNoScripts: true },
+  },
 
   modules: [
     "@nuxt/image",
