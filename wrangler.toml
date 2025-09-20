@@ -1,0 +1,14 @@
+name = "gravitalia"
+main = ".output/server/index.mjs"
+compatibility_date = "2022-09-10"
+route = "turms.gravitalia.com"
+
+rules = [
+    { type = "ESModule", globs = ["**/*.js", "**/*.mjs"]},
+]
+
+[assets]
+directory = ".output/public"
+
+[observability]
+enabled = false
