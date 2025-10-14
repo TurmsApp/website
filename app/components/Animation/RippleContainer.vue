@@ -3,8 +3,8 @@ import Ripple from "./Ripple.vue";
 </script>
 
 <template>
-	<div class="relative">
-		<slot />
-		<Ripple />
-	</div>
+  <div class="relative">
+    <slot />
+    <Ripple />
+  </div>
 </template>

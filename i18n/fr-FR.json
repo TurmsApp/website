@@ -1,31 +1,31 @@
 {
-	"layouts": {
-		"title": "Turms, un service Gravitalia"
-	},
+  "layouts": {
+    "title": "Turms, un service Gravitalia"
+  },
 
-	"home": {
-		"title": "Turms,",
-		"subtitle": "messagerie pair-à-pair et chiffrée.",
-		"download": "Télécharger",
-		"available_on": "Disponible sur",
-		"features": {
-			"communicate": {
-				"title": "Communiquer",
-				"description": "Communiquez librement avec votre famille, vos amis et vos collaborateurs grâce à une interface minimaliste, fluide et épurée. Exprimez vos idées avec clarté, que ce soit par écrit ou comme si vous en conversation orale. Partagez vos pensées, échangez des projets ou racontez simplement votre quotidien."
-			},
-			"p2p": {
-				"title": "Pair-à-pair",
-				"description": "Lorsque les deux pairs sont connectés sans qu'aucun proxy n'entrave la connexion, les échanges se déroulent directement entre eux, sans l'intervention d'un serveur. En revanche, si l'un des pairs n'est pas en ligne en même temps que l'autre, le message chiffré est temporairement stocké sur un serveur en attendant d'être délivré. De la même manière, si un proxy bloque la connexion pair-à-pair, les messages chiffrés sont acheminés via des serveurs relais (TURN) qui ne peuvent pas déchiffrer le message."
-			},
-			"cipher": {
-				"title": "Chiffrement multicouche",
-				"description": "Conçu d'abord pour la sécurité, l'échange de clés entre pairs s'effectue via la méthode Diffie-Hellman (X25519), ce qui empêche tout attaquant ou serveur d'intercepter les clés, y compris lors des           premiers échanges. Une fois les clés sécurisées et enregistrées, les correspondants échangent des messages chiffrés avec ChaCha20 par une clé rotative. WebRTC rajoute en outre une couche de sécurité supplémentaire (DTLS)."
-			}
-		},
-		"host": {
-			"title": "Modularité. C'est le maître mot.",
-			"subtitle": "Héberger vous-mêmes les services dont vous avez besoin.",
-			"host_instances": "Héberger ses instances"
-		}
-	}
+  "home": {
+    "title": "Turms,",
+    "subtitle": "messagerie pair-à-pair et chiffrée.",
+    "download": "Télécharger",
+    "available_on": "Disponible sur",
+    "features": {
+      "communicate": {
+        "title": "Communiquer",
+        "description": "Communiquez librement avec votre famille, vos amis et vos collaborateurs grâce à une interface minimaliste, fluide et épurée. Exprimez vos idées avec clarté, que ce soit par écrit ou comme si vous en conversation orale. Partagez vos pensées, échangez des projets ou racontez simplement votre quotidien."
+      },
+      "p2p": {
+        "title": "Pair-à-pair",
+        "description": "Lorsque les deux pairs sont connectés sans qu'aucun proxy n'entrave la connexion, les échanges se déroulent directement entre eux, sans l'intervention d'un serveur. En revanche, si l'un des pairs n'est pas en ligne en même temps que l'autre, le message chiffré est temporairement stocké sur un serveur en attendant d'être délivré. De la même manière, si un proxy bloque la connexion pair-à-pair, les messages chiffrés sont acheminés via des serveurs relais (TURN) qui ne peuvent pas déchiffrer le message."
+      },
+      "cipher": {
+        "title": "Chiffrement multicouche",
+        "description": "Conçu d'abord pour la sécurité, l'échange de clés entre pairs s'effectue via la méthode Diffie-Hellman (X25519), ce qui empêche tout attaquant ou serveur d'intercepter les clés, y compris lors des           premiers échanges. Une fois les clés sécurisées et enregistrées, les correspondants échangent des messages chiffrés avec ChaCha20 par une clé rotative. WebRTC rajoute en outre une couche de sécurité supplémentaire (DTLS)."
+      }
+    },
+    "host": {
+      "title": "Modularité. C'est le maître mot.",
+      "subtitle": "Héberger vous-mêmes les services dont vous avez besoin.",
+      "host_instances": "Héberger ses instances"
+    }
+  }
 }

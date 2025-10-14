@@ -1,31 +1,31 @@
 {
-	"layouts": {
-		"title": "Turms, from Gravitalia"
-	},
+  "layouts": {
+    "title": "Turms, from Gravitalia"
+  },
 
-	"home": {
-		"title": "Turms,",
-		"subtitle": "peer-to-peer encrypted messaging.",
-		"download": "Download",
-		"available_on": "Available on",
-		"features": {
-			"communicate": {
-				"title": "Communicate",
-				"description": "Communicate freely with your family, friends, and co-workers thanks to a minimalist, fluid, and streamlined interface. Express your ideas clearly, whether in writing or as if you were speaking. Share your thoughts, exchange projects, or simply recount your daily life."
-			},
-			"p2p": {
-				"title": "Peer-to-peer",
-				"description": "When both peers are connected without any proxy interfering with the connection, exchanges take place directly between them, without the intervention of a server. However, if one of the peers is not online at the same time as the other, the encrypted message is temporarily stored on a server until it can be delivered. Similarly, if a proxy blocks the peer-to-peer connection, encrypted messages are routed via relay servers (TURN) that cannot decrypt the message."
-			},
-			"cipher": {
-				"title": "Multi-layer encryption",
-				"description": "Designed primarily for security, key exchange between peers is performed using the Diffie-Hellman (X25519) method, which prevents any attacker or server from intercepting the keys, even during the initial exchanges. Once the keys are secured and stored, the correspondents exchange messages encrypted with ChaCha20 using a rotating key. WebRTC also adds an additional layer of security (DTLS)."
-			}
-		},
-		"host": {
-			"title": "Modularity. That's the key word.",
-			"subtitle": "Host the services you need by yourself.",
-			"host_instances": "Hosting your instances"
-		}
-	}
+  "home": {
+    "title": "Turms,",
+    "subtitle": "peer-to-peer encrypted messaging.",
+    "download": "Download",
+    "available_on": "Available on",
+    "features": {
+      "communicate": {
+        "title": "Communicate",
+        "description": "Communicate freely with your family, friends, and co-workers thanks to a minimalist, fluid, and streamlined interface. Express your ideas clearly, whether in writing or as if you were speaking. Share your thoughts, exchange projects, or simply recount your daily life."
+      },
+      "p2p": {
+        "title": "Peer-to-peer",
+        "description": "When both peers are connected without any proxy interfering with the connection, exchanges take place directly between them, without the intervention of a server. However, if one of the peers is not online at the same time as the other, the encrypted message is temporarily stored on a server until it can be delivered. Similarly, if a proxy blocks the peer-to-peer connection, encrypted messages are routed via relay servers (TURN) that cannot decrypt the message."
+      },
+      "cipher": {
+        "title": "Multi-layer encryption",
+        "description": "Designed primarily for security, key exchange between peers is performed using the Diffie-Hellman (X25519) method, which prevents any attacker or server from intercepting the keys, even during the initial exchanges. Once the keys are secured and stored, the correspondents exchange messages encrypted with ChaCha20 using a rotating key. WebRTC also adds an additional layer of security (DTLS)."
+      }
+    },
+    "host": {
+      "title": "Modularity. That's the key word.",
+      "subtitle": "Host the services you need by yourself.",
+      "host_instances": "Hosting your instances"
+    }
+  }
 }
