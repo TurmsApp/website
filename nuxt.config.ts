@@ -24,9 +24,7 @@ export default defineNuxtConfig({
       accountUrl: "account.gravitalia.com",
     },
     private: {
-      // Example key. Please update it!
-      ecdsaPrivateKey:
-        "-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQghZ7AapO4QiNxSL/q\nnxwIQpLdaegO2fEOuGMq8MWvSm+hRANCAATzyvfo3tpUQMkUXSlB9ICqiEjaVI1S\n2cEiZWIw81QLOZoRbXi84Ut/crnqWkF49x3/J9IxdQK0DJ9WJejojAD5\n-----END PRIVATE KEY-----",
+      ecdsaPrivateKey: "" // overwritten by environment variable.
     },
   },
 

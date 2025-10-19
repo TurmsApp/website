@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 
-export const generateToken = (sub: string) => {
+export const generateToken = (sub: string): string => {
   return jwt.sign(
     {
       sub,
-      iss: "Turms",
+      iss: "https://turms.gravitalia.com",
+      aud: "discovery"
     },
     useRuntimeConfig().private.ecdsaPrivateKey,
-    { algorithm: "RS256", expiresIn: "1h" },
-  );
+    { algorithm: "ES256", header: { kid: "3+uMdwtBCG5frztDFOxV97fvcmNyX/WZIQSX1SnDoto=" }, expiresIn: "5m" },
+  )
 };
