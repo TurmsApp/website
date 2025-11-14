@@ -10,7 +10,7 @@ rules = [
 [assets]
 directory = ".output/public"
 
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = [ "nodejs_compat", "nodejs_compat_v2" ]
 
 [observability]
 enabled = false
