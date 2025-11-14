@@ -25,7 +25,16 @@ const COOKIE_OPTIONS = {
   sameSite: "strict" as const,
 };
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+/**
+ * Converts a standard Base64 string to Base64URL.
+ * @param base64 Encoded string in standard Base64.
+ * @returns
+ */
+const toBase64url = (base64: string): string => {
+  return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+};
+
+export default defineNuxtRouteMiddleware(async () => {
   if (import.meta.client) {
     return;
   }
@@ -43,7 +52,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
       // Redirect the user to the external authorization service.
       navigateTo(
-        `https://account.gravitalia.com/authorize?redirect=https://turms.gravitalia.com/auth&challenge=${challenge}`,
+        `https://account.gravitalia.com/authorize?redirect=https://turms.gravitalia.com/auth&challenge=${toBase64url(challenge)}`,
         { external: true, redirectCode: 307 },
       );
     } catch (error) {
