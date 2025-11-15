@@ -7,6 +7,10 @@ rules = [
     { type = "ESModule", globs = ["**/*.js", "**/*.mjs"]},
 ]
 
+secrets_store_secrets = [
+  { binding = "TURMS_JWT_PRIVATE_KEY", store_id= "1ae16342dea540b582b170935a0f39af", secret_name = "TURMS_JWT_PRIVATE_KEY" }
+]
+
 [assets]
 directory = ".output/public"
 

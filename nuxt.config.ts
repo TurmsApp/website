@@ -24,7 +24,7 @@ export default defineNuxtConfig({
       accountUrl: "account.gravitalia.com",
     },
     private: {
-      ecdsaPrivateKey: "", // overwritten by environment variable.
+      TURMS_JWT_PRIVATE_KEY: "", // overwritten by environment variable.
     },
   },
 
@@ -156,7 +156,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: isDevelopment ? "node-server" : "cloudflare_module",
+    preset: "cloudflare_module",
     prerender: {
       autoSubfolderIndex: !isDevelopment,
     },

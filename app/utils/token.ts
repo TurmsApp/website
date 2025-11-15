@@ -1,22 +1,15 @@
-import { SignJWT } from "jose";
+import { SignJWT, importPKCS8 } from "jose";
 
-const EXPIRATION_TIME = "5m";
+const EXPIRATION_TIME = "6h";
 
 export const generateToken = async (sub: string): Promise<string> => {
-  const privateKeyPem = useRuntimeConfig().private.ecdsaPrivateKey;
+  const privateKeyPem = useRuntimeConfig().private.TURMS_JWT_PRIVATE_KEY;
 
-  const privateKey = await crypto.subtle.importKey(
-    "pkcs8",
-    new TextEncoder().encode(privateKeyPem),
-    { name: "ECDSA", namedCurve: "P-256" },
-    false,
-    ["sign"],
-  );
+  const privateKey = await importPKCS8(privateKeyPem, "ES256");
 
   const token = await new SignJWT()
     .setProtectedHeader({
       alg: "ES256",
-      kid: "3+uMdwtBCG5frztDFOxV97fvcmNyX/WZIQSX1SnDoto=",
     })
     .setAudience("discovery")
     .setIssuer("https://turms.gravitalia.com")

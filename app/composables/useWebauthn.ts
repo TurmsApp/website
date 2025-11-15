@@ -7,30 +7,12 @@ import type {
   AuthenticatorAssertionResponseJSON,
 } from "@simplewebauthn/server";
 
-/**
- * Converts a PEM string (like a certificate or key) to a Uint8Array.
- * @param {string} pem The PEM-encoded string.
- * @returns {Uint8Array} The corresponding data as a Uint8Array.
- */
-const pemToUint8Array = (pem: string) => {
-  const base64 = pem
-    .replace(/-----BEGIN [^-]+-----/, "")
-    .replace(/-----END [^-]+-----/, "")
-    .replace(/\s/g, "");
-
-  const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-
-  return bytes;
-};
+const EXPECTED_RPID = "account.gravitalia.com";
+const EXPECTED_ORIGIN = [`https://${EXPECTED_RPID}`];
 
 export const useWebautn = async (
-  publicKey: string,
+  userId: string,
+  publicKey: Uint8Array<ArrayBuffer>,
   expectedChallenge: string,
   signature?: string,
   authenticatorData?: string,
@@ -46,8 +28,8 @@ export const useWebautn = async (
       clientDataJSON,
     };
     const response: AuthenticationResponseJSON = {
-      id: "MA==",
-      rawId: "MA==",
+      id: userId,
+      rawId: userId,
       response: res,
       type: "public-key",
       clientExtensionResults: {},
@@ -55,26 +37,23 @@ export const useWebautn = async (
 
     const credential: WebAuthnCredential = {
       id: "",
-      publicKey: pemToUint8Array(publicKey),
+      publicKey,
       counter: 0,
       transports: [],
     };
 
     const opts: VerifyAuthenticationResponseOpts = {
       response,
-      expectedChallenge: `${expectedChallenge}`,
-      expectedOrigin: "https://account.gravitalia.com",
-      expectedRPID: "Gravitalia",
+      expectedChallenge,
+      expectedOrigin: EXPECTED_ORIGIN,
+      expectedRPID: EXPECTED_RPID,
       credential: credential,
-      requireUserVerification: false,
     };
     verification = await verifyAuthenticationResponse(opts);
   } catch (error) {
-    const _error = error as Error;
-    console.error(_error);
     return false;
   }
 
-  const { verified, authenticationInfo } = verification;
+  const { verified } = verification;
   return verified;
 };
