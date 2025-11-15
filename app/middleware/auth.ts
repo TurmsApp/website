@@ -1,6 +1,5 @@
 import { isProduction } from "std-env";
-//import { createPublicKey } from "crypto";
-import { importPKCS8 } from "jose";
+import { importSPKI } from "jose";
 import { encode } from "cbor-x";
 
 interface Key {
@@ -45,10 +44,8 @@ const toBase64url = (base64: string): string => {
  * @returns {Uint8Array<ArrayBuffer>}
  */
 const pemToCose = async (pem: string) => {
-  const cryptoKey = await importPKCS8(pem, "ES256");
+  const cryptoKey = await importSPKI(pem, "ES256");
 
-  //const publicKey = createPublicKey(pem);
-  //const jwk = publicKey.export({ format: "jwk" });
   const jwk = await crypto.subtle.exportKey("jwk", cryptoKey);
 
   if (jwk.kty !== "EC" || jwk.crv !== "P-256") {
@@ -83,13 +80,13 @@ export default defineNuxtRouteMiddleware(async () => {
     try {
       // 32 bytes (256 bits) is a standard secure length for a challenge.
       const challengeBytes = generateChallenge(32);
-      const challenge = challengeBytes.toString("base64");
+      const challenge = toBase64url(challengeBytes.toString("base64"));
       useCookie("challenge", COOKIE_OPTIONS).value = challenge;
 
       // Redirect the user to the external authorization service.
       const path = localePath("/auth");
       navigateTo(
-        `https://account.gravitalia.com/authorize?redirect=https://turms.gravitalia.com${path}&challenge=${toBase64url(challenge)}`,
+        `https://account.gravitalia.com/authorize?redirect=https://turms.gravitalia.com${path}&challenge=${challenge}`,
         { external: true, redirectCode: 307 },
       );
     } catch (error) {
@@ -99,7 +96,7 @@ export default defineNuxtRouteMiddleware(async () => {
   } else {
     const challenge = useCookie("challenge").value;
     // Clear the cookie immediately after reading it, regardless of the outcome.
-    useCookie("challenge", COOKIE_OPTIONS).value = undefined;
+    useCookie("challenge", {...COOKIE_OPTIONS, maxAge: 0}).value = null;
 
     if (!challenge || !signature || !authenticatorData || !clientDataJson) {
       // Redirect to the beginning of the auth flow.
