@@ -3,8 +3,11 @@ definePageMeta({
   middleware: ["auth"],
 });
 
+const token = useState("token");
+
 onMounted(() => {
-  window.close();
+  console.info(`Generated token is "${token.value}".`);
+  window.location.href = `turms://${token.value}`;
 });
 </script>
 

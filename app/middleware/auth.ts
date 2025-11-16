@@ -135,7 +135,7 @@ export default defineNuxtRouteMiddleware(async () => {
 
       if (isVerified) {
         const token = await generateToken(`${username}@${server}`);
-        console.info(`Generated token is "${token}".`);
+        useState("token", () => token);
         navigateTo(`turms://${token}`, { external: true });
       } else {
         navigateTo(localePath("/auth"));
