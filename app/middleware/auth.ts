@@ -1,7 +1,4 @@
 import { isProduction } from "std-env";
-import { importSPKI } from "jose";
-import { encode } from "cbor-x";
-import type { CookieOptions } from "#app";
 
 interface Key {
   id: string;
@@ -25,9 +22,9 @@ interface AuthQuery {
 const COOKIE_MAX_AGE = 60 * 5; // 5 minutes in seconds.
 const COOKIE_OPTIONS = {
   maxAge: COOKIE_MAX_AGE,
-  httpOnly: true,
-  secure: isProduction, // Should always be true in production.
-  sameSite: "strict",
+  httpOnly: false,
+  secure: false, // Should always be true in production.
+  sameSite: "lax",
 };
 
 /**
@@ -37,35 +34,6 @@ const COOKIE_OPTIONS = {
  */
 const toBase64url = (base64: string): string => {
   return base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-};
-
-/**
- * Converts a PEM public key (EC P-256) to a COSE Key (CBOR-encoded Uint8Array)
- * @param {string} pemContent Contents of the public key in PEM format
- * @returns {Uint8Array<ArrayBuffer>}
- */
-const pemToCose = async (pem: string) => {
-  const cryptoKey = await importSPKI(pem, "ES256");
-
-  const jwk = await crypto.subtle.exportKey("jwk", cryptoKey);
-
-  if (jwk.kty !== "EC" || jwk.crv !== "P-256") {
-    throw new Error("Key not supported");
-  }
-
-  const x = Buffer.from(jwk.x, "base64url");
-  const y = Buffer.from(jwk.y, "base64url");
-
-  const COSE_KEY = new Map();
-  COSE_KEY.set(1, 2);
-  COSE_KEY.set(3, -7);
-  COSE_KEY.set(-1, 1);
-  COSE_KEY.set(-2, x);
-  COSE_KEY.set(-3, y);
-
-  const coseBuffer = encode(COSE_KEY);
-
-  return new Uint8Array(coseBuffer);
 };
 
 const redirectToAccount = () => {
@@ -135,11 +103,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
         return redirectToAccount();
       }
 
-      const pkey = await pemToCose(publicKey?.publicKeyPem as string);
       // Perform WebAuthn verification.
       const isVerified = await useWebautn(
         user.id,
-        pkey,
+        publicKey.publicKeyPem,
         challenge as string,
         signature,
         authenticatorData,

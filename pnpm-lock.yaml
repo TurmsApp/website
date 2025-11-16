@@ -28,6 +28,9 @@ importers:
       "@vueuse/core":
         specifier: ^13.9.0
         version: 13.9.0(vue@3.5.21(typescript@5.9.2))
+      cbor:
+        specifier: ^10.0.11
+        version: 10.0.11
       cbor-x:
         specifier: ^1.6.0
         version: 1.6.0
@@ -3383,6 +3386,13 @@ packages:
         integrity: sha512-0kareyRwHSkL6ws5VXHEf8uY1liitysCVJjlmhaLG+IXLqhSaOO+t63coaso7yjwEzWZzLy8fJo06gZDVQM9Qg==,
       }
 
+  cbor@10.0.11:
+    resolution:
+      {
+        integrity: sha512-vIwORDd/WyB8Nc23o2zNN5RrtFGlR6Fca61TtjkUXueI3Jf2DOZDl1zsshvBntZ3wZHBM9ztjnkXSmzQDaq3WA==,
+      }
+    engines: { node: ">=20" }
+
   chalk@4.1.2:
     resolution:
       {
@@ -6008,6 +6018,13 @@ packages:
       {
         integrity: sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==,
       }
+
+  nofilter@3.1.0:
+    resolution:
+      {
+        integrity: sha512-l2NNj07e9afPnhAhvgVrCD/oy2Ai1yfLpuo3EpiO1jFTsB4sFz6oIfAfSZyQzVpkZQ9xS8ZS5g1jCBgq4Hwo0g==,
+      }
+    engines: { node: ">=12.19" }
 
   nopt@8.1.0:
     resolution:
@@ -10654,6 +10671,10 @@ snapshots:
     optionalDependencies:
       cbor-extract: 2.2.0
 
+  cbor@10.0.11:
+    dependencies:
+      nofilter: 3.1.0
+
   chalk@4.1.2:
     dependencies:
       ansi-styles: 4.3.0
@@ -12271,6 +12292,8 @@ snapshots:
   node-mock-http@1.0.3: {}
 
   node-releases@2.0.21: {}
+
+  nofilter@3.1.0: {}
 
   nopt@8.1.0:
     dependencies:

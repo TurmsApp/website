@@ -6,13 +6,44 @@ import type {
   AuthenticationResponseJSON,
   AuthenticatorAssertionResponseJSON,
 } from "@simplewebauthn/server";
+import { encode } from "cbor";
+import { importSPKI } from "jose";
 
 const EXPECTED_RPID = "account.gravitalia.com";
 const EXPECTED_ORIGIN = [`https://${EXPECTED_RPID}`];
 
+/**
+ * Converts a PEM public key (EC P-256) to a COSE Key (CBOR-encoded Uint8Array)
+ * @param {string} pemContent Contents of the public key in PEM format
+ * @returns {Uint8Array}
+ */
+const pemToCose = async (pem: string) => {
+  const cryptoKey = await importSPKI(pem, "ES256");
+
+  const jwk = await crypto.subtle.exportKey("jwk", cryptoKey);
+
+  if (jwk.kty !== "EC" || jwk.crv !== "P-256") {
+    throw new Error("Key not supported");
+  }
+
+  const x = Buffer.from(jwk.x, "base64url");
+  const y = Buffer.from(jwk.y, "base64url");
+
+  const COSE_KEY = new Map();
+  COSE_KEY.set(1, 2);
+  COSE_KEY.set(3, -7);
+  COSE_KEY.set(-1, 1);
+  COSE_KEY.set(-2, x);
+  COSE_KEY.set(-3, y);
+
+  const coseBuffer = encode(COSE_KEY);
+
+  return new Uint8Array(coseBuffer);
+};
+
 export const useWebautn = async (
   userId: string,
-  publicKey: Uint8Array<ArrayBuffer>,
+  publicKey: string,
   expectedChallenge: string,
   signature?: string,
   authenticatorData?: string,
@@ -37,7 +68,7 @@ export const useWebautn = async (
 
     const credential: WebAuthnCredential = {
       id: "",
-      publicKey,
+      publicKey: await pemToCose(publicKey),
       counter: 0,
       transports: [],
     };
@@ -51,6 +82,7 @@ export const useWebautn = async (
     };
     verification = await verifyAuthenticationResponse(opts);
   } catch (error) {
+    console.error(error);
     return false;
   }
 
