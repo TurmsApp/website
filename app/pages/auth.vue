@@ -6,7 +6,6 @@ definePageMeta({
 const token = useState("token");
 
 onMounted(() => {
-  console.info(`Generated token is "${token.value}".`);
   window.location.href = `turms://${token.value}`;
 });
 </script>
@@ -14,5 +13,6 @@ onMounted(() => {
 <template>
   <div class="h-screen w-screen flex items-center justify-center">
     <p>You're in! You can close this page.</p>
+    <p>{{ token }}</p>
   </div>
 </template>
