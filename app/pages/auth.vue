@@ -13,6 +13,6 @@ onMounted(() => {
 <template>
   <div class="h-screen w-screen flex items-center justify-center">
     <p>You're in! You can close this page.</p>
-    <p>{{ token }}</p>
+    <p class="hidden">{{ token }}</p>
   </div>
 </template>
