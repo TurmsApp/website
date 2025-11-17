@@ -18,13 +18,17 @@ interface AuthQuery {
   clientDataJson?: string;
 }
 
+const redirect = isProduction
+  ? "https://turms.gravitalia.com"
+  : "http://localhost:3000";
+
 // Configuration for the challenge cookie.
 const COOKIE_MAX_AGE = 60 * 5; // 5 minutes in seconds.
 const COOKIE_OPTIONS = {
   maxAge: COOKIE_MAX_AGE,
   httpOnly: false,
-  secure: false, // Should always be true in production.
-  sameSite: "lax",
+  secure: isProduction, // Should always be true in production.
+  sameSite: "lax" as const,
 };
 
 /**
@@ -46,9 +50,6 @@ const redirectToAccount = () => {
 
   // Redirect the user to the external authorization service.
   const path = localePath("/auth");
-  const redirect = isProduction
-    ? "https://turms.gravitalia.com"
-    : "http://localhost:3000";
   navigateTo(
     `https://account.gravitalia.com/authorize?redirect=${redirect}${path}&challenge=${challenge}`,
     { external: true, redirectCode: 307 },
@@ -119,13 +120,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
         const token = await generateToken(`${username}@${server}`);
         useState("token", () => token);
-        navigateTo(`turms://${token}`, { external: true });
+        navigateTo(`turms://auth?token=${token}`, {
+          external: true,
+          redirectCode: 307,
+        });
       } else {
         return redirectToAccount();
       }
     } catch (err) {
       console.error(err);
-      return redirectToAccount();
+      useState("error", () => err);
     }
   }
 });

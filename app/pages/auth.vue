@@ -3,16 +3,12 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-const token = useState("token");
-
-onMounted(() => {
-  window.location.href = `turms://${token.value}`;
-});
+const error = useState("error");
 </script>
 
 <template>
   <div class="h-screen w-screen flex items-center justify-center">
-    <p>You're in! You can close this page.</p>
-    <p class="hidden">{{ token }}</p>
+    <p>An error occured.</p>
+    <p v-if="error" class="text-red-500">{{ error }}</p>
   </div>
 </template>
