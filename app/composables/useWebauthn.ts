@@ -18,7 +18,7 @@ const EXPECTED_ORIGIN = [`https://${EXPECTED_RPID}`];
  * @param {string} pemContent Contents of the public key in PEM format
  * @returns {Uint8Array}
  */
-export const pemToCose = async (pem: string) => {
+const pemToCose = async (pem: string) => {
   const cryptoKey = await importSPKI(pem, "ES256");
 
   const jwk = await crypto.subtle.exportKey("jwk", cryptoKey);
@@ -27,8 +27,8 @@ export const pemToCose = async (pem: string) => {
     throw new Error("Key not supported");
   }
 
-  const x = Buffer.from(jwk.x, "base64url");
-  const y = Buffer.from(jwk.y, "base64url");
+  const x = Buffer.from(jwk.x, "base64");
+  const y = Buffer.from(jwk.y, "base64");
 
   const COSE_KEY = new Map();
   COSE_KEY.set(1, 2);
@@ -53,39 +53,34 @@ export const useWebautn = async (
   if (!signature || !authenticatorData || !clientDataJSON) return false;
 
   let verification: VerifiedAuthenticationResponse;
-  try {
-    let res: AuthenticatorAssertionResponseJSON = {
-      signature,
-      authenticatorData,
-      clientDataJSON,
-    };
-    const response: AuthenticationResponseJSON = {
-      id: userId,
-      rawId: userId,
-      response: res,
-      type: "public-key",
-      clientExtensionResults: {},
-    };
+  let res: AuthenticatorAssertionResponseJSON = {
+    signature,
+    authenticatorData,
+    clientDataJSON,
+  };
+  const response: AuthenticationResponseJSON = {
+    id: userId,
+    rawId: userId,
+    response: res,
+    type: "public-key",
+    clientExtensionResults: {},
+  };
 
-    const credential: WebAuthnCredential = {
-      id: "",
-      publicKey: await pemToCose(publicKey),
-      counter: 0,
-      transports: [],
-    };
+  const credential: WebAuthnCredential = {
+    id: "",
+    publicKey: await pemToCose(publicKey),
+    counter: 0,
+    transports: [],
+  };
 
-    const opts: VerifyAuthenticationResponseOpts = {
-      response,
-      expectedChallenge,
-      expectedOrigin: EXPECTED_ORIGIN,
-      expectedRPID: EXPECTED_RPID,
-      credential: credential,
-    };
-    verification = await verifyAuthenticationResponse(opts);
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+  const opts: VerifyAuthenticationResponseOpts = {
+    response,
+    expectedChallenge,
+    expectedOrigin: EXPECTED_ORIGIN,
+    expectedRPID: EXPECTED_RPID,
+    credential: credential,
+  };
+  verification = await verifyAuthenticationResponse(opts);
 
   const { verified } = verification;
   return verified;

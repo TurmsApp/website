@@ -1,20 +1,20 @@
-import { SignJWT, importPKCS8 } from "jose";
+import * as jose from "jose";
 
 const EXPIRATION_TIME = "6h";
+const alg = "ES256";
 
 export const generateToken = async (sub: string): Promise<string> => {
   const privateKeyPem = useRuntimeConfig().private.TURMS_JWT_PRIVATE_KEY;
+  const privateKey = await jose.importPKCS8(privateKeyPem, alg);
 
-  const privateKey = await importPKCS8(privateKeyPem, "ES256");
-
-  const token = await new SignJWT()
+  const token = await new jose.SignJWT({})
     .setProtectedHeader({
-      alg: "ES256",
+      alg,
     })
-    .setAudience("discovery")
-    .setIssuer("https://turms.gravitalia.com")
-    .setSubject(sub)
     .setIssuedAt()
+    .setIssuer("https://turms.gravitalia.com")
+    .setAudience("discovery")
+    .setSubject(sub)
     .setExpirationTime(EXPIRATION_TIME)
     .sign(privateKey);
 

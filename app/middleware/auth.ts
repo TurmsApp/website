@@ -1,5 +1,4 @@
 import { isProduction } from "std-env";
-import { pemToCose } from "~/composables/useWebauthn";
 
 interface Key {
   id: string;
@@ -20,7 +19,7 @@ interface AuthQuery {
 }
 
 const redirect = isProduction
-  ? "http://turms.gravitalia.com"
+  ? "https://turms.gravitalia.com"
   : "http://localhost:3000";
 
 // Configuration for the challenge cookie.
@@ -28,7 +27,7 @@ const COOKIE_MAX_AGE = 60 * 5; // 5 minutes in seconds.
 const COOKIE_OPTIONS = {
   maxAge: COOKIE_MAX_AGE,
   httpOnly: true,
-  secure: false, // Should always be true in production.
+  secure: isProduction, // Should always be true in production.
   sameSite: "lax" as const,
 };
 
@@ -109,7 +108,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
       const isVerified = await useWebautn(
         user.id,
         publicKey.publicKeyPem,
-        challenge as string,
+        challenge,
         signature,
         authenticatorData,
         clientDataJson,
@@ -120,7 +119,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
           undefined;
 
         const token = await generateToken(`${username}@${server}`);
-        useState("token", () => token);
         navigateTo(`turms://auth?token=${token}`, {
           external: true,
           redirectCode: 307,
@@ -128,9 +126,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
       } else {
         return redirectToAccount();
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      useState("error", () => err);
+
+      const errorPOJO = {
+        name: err.name || "UnknownError",
+        message: err.message || "An unknown error occurred.",
+        stack: err.stack || "No stack trace available.",
+      };
+
+      useState("error", () => JSON.stringify(errorPOJO));
     }
   }
 });
