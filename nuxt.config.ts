@@ -28,6 +28,18 @@ export default defineNuxtConfig({
     },
   },
 
+  vite: {
+    resolve: {
+      alias: {
+        "node:buffer": "buffer",
+        buffer: "buffer",
+      },
+    },
+    define: {
+      "global.Buffer": "Buffer",
+    },
+  },
+
   app: {
     keepalive: true,
     head: {

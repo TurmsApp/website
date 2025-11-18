@@ -6,8 +6,9 @@ import type {
   AuthenticationResponseJSON,
   AuthenticatorAssertionResponseJSON,
 } from "@simplewebauthn/server";
-import { encode } from "cbor";
 import { importSPKI } from "jose";
+import { cborEncodeMap } from "~/utils/cbor";
+import { Buffer } from "buffer";
 
 const EXPECTED_RPID = "account.gravitalia.com";
 const EXPECTED_ORIGIN = [`https://${EXPECTED_RPID}`];
@@ -17,12 +18,12 @@ const EXPECTED_ORIGIN = [`https://${EXPECTED_RPID}`];
  * @param {string} pemContent Contents of the public key in PEM format
  * @returns {Uint8Array}
  */
-const pemToCose = async (pem: string) => {
+export const pemToCose = async (pem: string) => {
   const cryptoKey = await importSPKI(pem, "ES256");
 
   const jwk = await crypto.subtle.exportKey("jwk", cryptoKey);
 
-  if (jwk.kty !== "EC" || jwk.crv !== "P-256") {
+  if (jwk.kty !== "EC" || jwk.crv !== "P-256" || !jwk.x || !jwk.y) {
     throw new Error("Key not supported");
   }
 
@@ -36,9 +37,9 @@ const pemToCose = async (pem: string) => {
   COSE_KEY.set(-2, x);
   COSE_KEY.set(-3, y);
 
-  const coseBuffer = encode(COSE_KEY);
+  const cborKey = cborEncodeMap(COSE_KEY);
 
-  return new Uint8Array(coseBuffer);
+  return new Uint8Array(cborKey);
 };
 
 export const useWebautn = async (

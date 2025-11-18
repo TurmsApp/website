@@ -1,4 +1,5 @@
 import { isProduction } from "std-env";
+import { pemToCose } from "~/composables/useWebauthn";
 
 interface Key {
   id: string;
@@ -19,15 +20,15 @@ interface AuthQuery {
 }
 
 const redirect = isProduction
-  ? "https://turms.gravitalia.com"
+  ? "http://turms.gravitalia.com"
   : "http://localhost:3000";
 
 // Configuration for the challenge cookie.
 const COOKIE_MAX_AGE = 60 * 5; // 5 minutes in seconds.
 const COOKIE_OPTIONS = {
   maxAge: COOKIE_MAX_AGE,
-  httpOnly: false,
-  secure: isProduction, // Should always be true in production.
+  httpOnly: true,
+  secure: false, // Should always be true in production.
   sameSite: "lax" as const,
 };
 
